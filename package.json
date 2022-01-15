@@ -17,7 +17,7 @@
     "css-loader": "^3.5.3",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
-    "marked": "^1.0.0",
+    "marked": "^4.0.10",
     "style-loader": "^1.2.1",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.11",
