@@ -20,28 +20,26 @@ class ImageUrlErrorPlugin {
     });
   }
 
-  addOnErrorFunc(contents, afterModify) {
-    let start = contents.match(/<img\s+.*\s*/i);
+  addOnErrorFunc(contents, newContents = "") {
+    // 检测是否有<img/> 标签
+    const start = contents.match(/<img\s+.*\s*/i);
     if (start) {
-      let first = contents.substring(0, start.index);
-      let last = contents.substring(start.index);
-      let end = last.match(/\s*(\/?)>/);
+      const first = contents.substring(0, start.index);
+      const last = contents.substring(start.index);
+      const end = last.match(/\s*(\/?)>/);
       let target = "";
       if (end) {
         target = last.substring(0, end.index);
       }
 
+      // 判断如何没有写错误处理函数，则自动加上错误处理函数
       if (!/\s+onerror\s*=/.test(target)) {
         target += ` onerror="this.src='${this.imageUrl}'" `;
       }
-
-      let imgStr = first + target;
-      return this.addOnErrorFunc(
-        last.substr(end.index),
-        afterModify ? afterModify + imgStr : imgStr
-      );
+      newContents = newContents + first + target;
+      return this.addOnErrorFunc(last.substr(end.index), newContents);
     } else {
-      return afterModify ? afterModify + contents : contents;
+      return newContents ? newContents + contents : contents;
     }
   }
 }
