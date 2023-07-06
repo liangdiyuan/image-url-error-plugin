@@ -37,7 +37,7 @@ class ImageUrlErrorPlugin {
         target += ` onerror="this.src='${this.imageUrl}'" `;
       }
       newContents = newContents + first + target;
-      return this.addOnErrorFunc(last.substr(end.index), newContents);
+      return this.addOnErrorFunc(last.substring(end.index), newContents);
     } else {
       return newContents ? newContents + contents : contents;
     }
