@@ -15,7 +15,8 @@
       </div>
       <img :class="{2:true}" :src="" @alt="" />
       <div id="root"></div>
-      <img class="3" src="" v-on:error="this.src ='1.png'" />
+      <img class="3 onerror" src="" v-on:error="this.src ='1.png'" />
+      <img class="3" src="" onerror = "this.src ='1.png'" />
     </div>
   </body>
 </html>

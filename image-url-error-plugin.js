@@ -20,31 +20,28 @@ class ImageUrlErrorPlugin {
     });
   }
 
-  addOnErrorFunc(contents, newStr) {
+  addOnErrorFunc(contents, afterModify) {
     let start = contents.match(/<img\s+.*\s*/i);
     if (start) {
       let first = contents.substring(0, start.index);
       let last = contents.substring(start.index);
-      console.log("last--->", last)
       let end = last.match(/\s*(\/?)>/);
       let target = "";
       if (end) {
         target = last.substring(0, end.index);
       }
 
-      console.log(target);
-
-      if (target.indexOf("onerror") < 0) {
+      if (!/\s+onerror\s*=/.test(target)) {
         target += ` onerror="this.src='${this.imageUrl}'" `;
       }
 
       let imgStr = first + target;
       return this.addOnErrorFunc(
         last.substr(end.index),
-        newStr ? newStr + imgStr : imgStr
+        afterModify ? afterModify + imgStr : imgStr
       );
     } else {
-      return newStr ? newStr + contents : contents;
+      return afterModify ? afterModify + contents : contents;
     }
   }
 }
