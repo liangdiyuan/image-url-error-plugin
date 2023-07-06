@@ -25,6 +25,7 @@ class ImageUrlErrorPlugin {
     if (start) {
       let first = contents.substring(0, start.index);
       let last = contents.substring(start.index);
+      console.log("last--->", last)
       let end = last.match(/\s*(\/?)>/);
       let target = "";
       if (end) {
