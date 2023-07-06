@@ -4,6 +4,7 @@ class ImageUrlErrorPlugin {
   }
   apply(compiler) {
     console.log("ImageUrlErrorPlugin 启动");
+    // 在资源输出到目标目录之前触发emit
     compiler.hooks.emit.tap("ImageUrlErrorPlugin", (compilation) => {
       const { assets } = compilation;
       for (const name in assets) {
@@ -21,23 +22,24 @@ class ImageUrlErrorPlugin {
 
   addOnErrorFunc(contents, newStr) {
     let start = contents.match(/<img\s+.*\s*/i);
-    console.log(start)
     if (start) {
       let first = contents.substring(0, start.index);
-      let sliceStr = contents.substr(start.index);
-      let end = sliceStr.match(/\s*(\/?)>/);
-      let content = "";
+      let last = contents.substring(start.index);
+      let end = last.match(/\s*(\/?)>/);
+      let target = "";
       if (end) {
-        content = sliceStr.substr(0, end.index);
+        target = last.substring(0, end.index);
       }
 
-      if (content.indexOf("onerror") < 0) {
-        content += ` onerror="this.src='${this.imageUrl}'" `;
+      console.log(target);
+
+      if (target.indexOf("onerror") < 0) {
+        target += ` onerror="this.src='${this.imageUrl}'" `;
       }
 
-      let imgStr = first + content;
+      let imgStr = first + target;
       return this.addOnErrorFunc(
-        sliceStr.substr(end.index),
+        last.substr(end.index),
         newStr ? newStr + imgStr : imgStr
       );
     } else {
